@@ -14,24 +14,27 @@ class App extends Component {
   }
 
   handleIncreament = (habit) => {
-    console.log(`handleIncreament : ${habit.name}`);
-    const habits = [...this.state.habits];
-    const index = habits.indexOf(habit);
-    habits[index].count++;
+    const habits = this.state.habits.map(item => {
+      if (item.id === habit.id) {
+        return {...item, count: item.count + 1};
+      }
+      return item;
+    })
     this.setState({habits});
   }
 
   handleDecreament = (habit) => {
-    console.log(`handleDecreament : ${habit.name}`)
-    const habits = [...this.state.habits];
-    const index = habits.indexOf(habit);
-    const count = habits[index].count - 1;
-    habits[index].count = count < 0 ? 0 : count;
+    const habits = this.state.habits.map(item => {
+      if (item.id === habit.id) {
+        const count = item.count - 1;
+        return {...item, count: count < 0 ? 0 : count};
+      }
+      return item;
+    })
     this.setState({habits});
   }
 
   handleDelete = (habit) => {
-    console.log(`handleDelete : ${habit.name}`);
     const habits = this.state.habits.filter(item => item.id !== habit.id);
     this.setState({habits});
   }
@@ -44,13 +47,16 @@ class App extends Component {
 
   handleReset = () => {
     const habits = this.state.habits.map(item => {
-      item.count = 0;
+      if (item.count > 0) {
+        return {...item, count: 0};
+      }
       return item;
     })
     this.setState({habits});
   }
 
   render() {
+    console.log('App');
     return (
       <>
         <Navbar totalCount={this.state.habits.reduce((prev, item) => prev + item.count, 0)}/>
