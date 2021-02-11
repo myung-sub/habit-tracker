@@ -42,17 +42,25 @@ class App extends Component {
     this.setState({habits});
   }
 
+  handleReset = () => {
+    const habits = this.state.habits.map(item => {
+      item.count = 0;
+      return item;
+    })
+    this.setState({habits});
+  }
 
   render() {
     return (
       <>
-        <Navbar totalCount={this.state.habits.filter(item => item.count > 0).length}/>
+        <Navbar totalCount={this.state.habits.reduce((prev, item) => prev + item.count, 0)}/>
         <Habits 
           habits={this.state.habits}
           onIncreament={this.handleIncreament}
           onDecreament={this.handleDecreament}
           onDelete={this.handleDelete}
           onAdd={this.handleAdd}
+          onReset={this.handleReset}
         />
       </>
     )
